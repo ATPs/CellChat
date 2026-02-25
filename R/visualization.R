@@ -2223,7 +2223,9 @@ netVisual_bubble <- function(object, sources.use = NULL, targets.use = NULL, sig
                                   pairLR.use = pairLR.use,
                                   thresh = thresh)
     df.net$source.target <- paste(df.net$source, df.net$target, sep = " -> ")
-    source.target <- paste(rep(sources.use, each = length(targets.use)), targets.use, sep = " -> ")
+    if (!(is.null(sources.use) || is.null(targets.use))){
+      source.target <- paste(rep(sources.use, each = length(targets.use)), targets.use, sep = " -> ")
+    }
     source.target.isolate <- setdiff(source.target, unique(df.net$source.target))
     if (length(source.target.isolate) > 0) {
       df.net.isolate <- as.data.frame(matrix(NA, nrow = length(source.target.isolate), ncol = ncol(df.net)))
@@ -2859,7 +2861,7 @@ netVisual_chord_gene <- function(object, slot.name = "net", color.use = NULL,
                                  thresh = 0.05,
                                  ...){
   if (!is.null(pairLR.use)) {
-    if (!is.data.frame(pairLR.use) | sum(c("interaction_name","pathway_name") %in% colnames(pairLR.use) == 0)) {
+    if (!is.data.frame(pairLR.use) | sum(c("interaction_name","pathway_name") %in% colnames(pairLR.use)) == 0) {
       stop("pairLR.use should be a data frame with a signle column named either 'interaction_name' or 'pathway_name' ")
     } else if ("pathway_name" %in% colnames(pairLR.use)) {
       message("slot.name is set to be 'netP' when pairLR.use contains signaling pathways")
